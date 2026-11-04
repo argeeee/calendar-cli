@@ -20,6 +20,9 @@
     "url": "https://github.com/argeeee/calendar-cli/issues"
   },
   "homepage": "https://github.com/argeeee/calendar-cli#readme",
+  "dependencies": {
+    "@argetim/arg-parser": "^1.0.0"
+  },
   "devDependencies": {
     "@types/node": "^26.6.6",
     "esbuild": "^0.28.2",
