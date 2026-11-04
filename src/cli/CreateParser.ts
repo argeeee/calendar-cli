@@ -38,12 +38,14 @@ class ListEventsCommand extends Command<ParsedEventsCommand> {
   constructor() {
     super();
     this.argParser.addOption("from", {
-      help: "Inclusive range start (ISO date or date-time)",
+      help:
+        "Inclusive range start (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss[.fraction] with Z or ±HH:mm; fraction is 1–3 digits)",
       valueHelp: "date",
       mandatory: true,
     });
     this.argParser.addOption("to", {
-      help: "Inclusive range end (ISO date or date-time)",
+      help:
+        "Inclusive range end (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss[.fraction] with Z or ±HH:mm; fraction is 1–3 digits)",
       valueHelp: "date",
       mandatory: true,
     });
@@ -64,7 +66,9 @@ class ListEventsCommand extends Command<ParsedEventsCommand> {
     const from = normalizeDate(args.option("from"));
     const to = normalizeDate(args.option("to"));
     if (from === undefined || to === undefined) {
-      this.usageException("--from and --to must be ISO dates or date-times.");
+      this.usageException(
+        "--from and --to must be YYYY-MM-DD dates or date-times in YYYY-MM-DDTHH:mm:ss[.fraction]Z or YYYY-MM-DDTHH:mm:ss[.fraction]±HH:mm form (fraction: 1–3 digits).",
+      );
     }
     const limit = parseNonnegativeInteger(args.option("limit"));
     const offset = parseNonnegativeInteger(args.option("offset"));
