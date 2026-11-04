@@ -5,6 +5,17 @@ export type ParsedEventsCommand =
   | { kind: "events.list"; arguments: ArgResults }
   | { kind: "events.labels.list"; arguments: ArgResults };
 
+function requireArgResults(command: {
+  argResults: ArgResults | undefined;
+  name: string;
+}): ArgResults {
+  if (!command.argResults) {
+    throw new Error(`Arguments for "${command.name}" were not parsed.`);
+  }
+
+  return command.argResults;
+}
+
 class EventsCommand extends Command<ParsedEventsCommand> {
   readonly name = "events";
   readonly description = "Commands for calendar events.";
@@ -19,7 +30,7 @@ class ListEventsCommand extends Command<ParsedEventsCommand> {
   readonly description = "List events.";
 
   override run(): ParsedEventsCommand {
-    return { kind: "events.list", arguments: this.argResults! };
+    return { kind: "events.list", arguments: requireArgResults(this) };
   }
 }
 
@@ -28,7 +39,10 @@ class ListEventLabelsCommand extends Command<ParsedEventsCommand> {
   readonly description = "List event labels and their IDs.";
 
   override run(): ParsedEventsCommand {
-    return { kind: "events.labels.list", arguments: this.argResults! };
+    return {
+      kind: "events.labels.list",
+      arguments: requireArgResults(this),
+    };
   }
 }
 
