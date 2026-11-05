@@ -21,7 +21,9 @@
   },
   "homepage": "https://github.com/argeeee/calendar-cli#readme",
   "dependencies": {
-    "@argetim/arg-parser": "^1.0.0"
+    "@argetim/arg-parser": "^1.0.0",
+    "google-auth-library": "^11.3.3",
+    "googleapis": "^182.0.0"
   },
   "devDependencies": {
     "@types/node": "^26.6.6",
