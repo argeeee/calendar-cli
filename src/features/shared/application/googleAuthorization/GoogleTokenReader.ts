@@ -1,8 +1,7 @@
-import { chmod, mkdir, readFile, stat, writeFile } from "node:fs/promises";
-import { dirname } from "node:path";
+import { readFile, stat } from "node:fs/promises";
 import type { Credentials } from "google-auth-library";
 
-export class GoogleTokenStore {
+export class GoogleTokenReader {
   constructor(private readonly tokenPath: string) {}
 
   async read(): Promise<Credentials | undefined> {
@@ -26,13 +25,5 @@ export class GoogleTokenStore {
 
       throw error;
     }
-  }
-
-  async write(token: Credentials): Promise<void> {
-    await mkdir(dirname(this.tokenPath), { recursive: true, mode: 0o700 });
-    await writeFile(this.tokenPath, JSON.stringify(token, null, 2), {
-      mode: 0o600,
-    });
-    await chmod(this.tokenPath, 0o600);
   }
 }

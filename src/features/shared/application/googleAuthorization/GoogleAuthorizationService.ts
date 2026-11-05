@@ -1,4 +1,3 @@
-import { join } from "node:path";
 import type { OAuth2Client } from "google-auth-library";
 import { google } from "googleapis";
 import { failure, success } from "../../../../core/Result";
@@ -8,32 +7,23 @@ import type {
   GoogleAuthorizationOptions,
 } from "../models/GoogleAuthorizationOptions";
 import type { GoogleAuthorizationState } from "../models/GoogleAuthorizationState";
-import { DefaulBrowserOpener } from "../services/DefaulBrowserOpener";
-import { GoogleOAuthAuthorizer } from "./GoogleOAuthAuthorizer";
-import { GoogleTokenStore } from "./GoogleTokenStore";
+import type { GoogleOAuthAuthorizer } from "./GoogleOAuthAuthorizer";
+import type { GoogleTokenReader } from "./GoogleTokenReader";
+import type { GoogleTokenWriter } from "./GoogleTokenWriter";
 
 const CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar";
 const TASKS_SCOPE = "https://www.googleapis.com/auth/tasks";
 
 export class GoogleAuthorizationService {
   private readonly environment: NodeJS.ProcessEnv;
-  private readonly tokenStore: GoogleTokenStore;
-  private readonly oauthAuthorizer: GoogleOAuthAuthorizer;
-
   constructor(
     private readonly state: GoogleAuthorizationState,
+    private readonly tokenReader: GoogleTokenReader,
+    private readonly tokenWriter: GoogleTokenWriter,
+    private readonly oauthAuthorizer: GoogleOAuthAuthorizer,
     options: GoogleAuthorizationOptions = {},
   ) {
     this.environment = options.environment ?? process.env;
-    const tokenPath = join(
-      options.projectDirectory ?? process.cwd(),
-      ".calendar",
-      "google-oauth-token.json",
-    );
-    this.tokenStore = new GoogleTokenStore(tokenPath);
-    this.oauthAuthorizer = new GoogleOAuthAuthorizer(
-      options.browserOpener ?? new DefaulBrowserOpener(),
-    );
   }
 
   async getAuthorizedClient(
@@ -85,7 +75,7 @@ export class GoogleAuthorizationService {
     requireTasksScope: boolean,
     requireCalendarScope: boolean,
   ): Promise<boolean> {
-    const stored = await this.tokenStore.read();
+    const stored = await this.tokenReader.read();
     if (
       !stored ||
       !this.hasRequiredScopes(
@@ -124,7 +114,7 @@ export class GoogleAuthorizationService {
   private async authorizeAndStore(client: OAuth2Client): Promise<OAuth2Client> {
     const token = await this.oauthAuthorizer.authorize(client);
     client.setCredentials(token);
-    await this.tokenStore.write(token);
+    await this.tokenWriter.write(token);
     return client;
   }
 
@@ -153,11 +143,4 @@ export class GoogleAuthorizationService {
       message: "Google authorization could not complete the request.",
     };
   }
-}
-
-export function createGoogleAuthorizationService(
-  state: GoogleAuthorizationState,
-  options: GoogleAuthorizationOptions = {},
-): GoogleAuthorizationService {
-  return new GoogleAuthorizationService(state, options);
 }

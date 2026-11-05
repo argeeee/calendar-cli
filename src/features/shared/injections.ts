@@ -1,11 +1,37 @@
+import { join } from "node:path";
 import { lazy } from "../../core/lazy";
-import {
-  createGoogleAuthorizationService,
-} from "./application/googleAuthorization/GoogleAuthorizationService";
+import { GoogleAuthorizationService } from "./application/googleAuthorization/GoogleAuthorizationService";
+import { GoogleOAuthAuthorizer } from "./application/googleAuthorization/GoogleOAuthAuthorizer";
+import { GoogleTokenReader } from "./application/googleAuthorization/GoogleTokenReader";
+import { GoogleTokenWriter } from "./application/googleAuthorization/GoogleTokenWriter";
 import { GoogleAuthorizationState } from "./application/models/GoogleAuthorizationState";
+import { DefaulBrowserOpener } from "./application/services/DefaulBrowserOpener";
 
-const googleAuthorizationState = new GoogleAuthorizationState();
+const getGoogleAuthorizationState = lazy(
+  () => new GoogleAuthorizationState(),
+);
+const getBrowserOpener = lazy(
+  () => new DefaulBrowserOpener(),
+);
+const getTokenPath = lazy(
+  () => join(process.cwd(), ".calendar", "google-oauth-token.json"),
+);
+const getGoogleTokenReader = lazy(
+  () => new GoogleTokenReader(getTokenPath()),
+);
+const getGoogleTokenWriter = lazy(
+  () => new GoogleTokenWriter(getTokenPath()),
+);
+const getGoogleOAuthAuthorizer = lazy(
+  () => new GoogleOAuthAuthorizer(getBrowserOpener()),
+);
 
 export const getGoogleAuthorizationService = lazy(
-  () => createGoogleAuthorizationService(googleAuthorizationState),
+  () =>
+    new GoogleAuthorizationService(
+      getGoogleAuthorizationState(),
+      getGoogleTokenReader(),
+      getGoogleTokenWriter(),
+      getGoogleOAuthAuthorizer(),
+    ),
 );
