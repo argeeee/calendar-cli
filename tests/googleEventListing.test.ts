@@ -1,10 +1,10 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { google } from "googleapis";
-import { success } from "../../../../core/Result";
-import type { GoogleCalendarClient } from "../clients/GoogleCalendarClient";
-import { GetEventQueryImpl } from "./GetEventQueryImpl";
-import { ListEventsQueryImpl } from "./ListEventsQueryImpl";
+import { success } from "../src/core/Result";
+import type { GoogleCalendarClient } from "../src/features/events/data/clients/GoogleCalendarClient";
+import { GetEventQueryImpl } from "../src/features/events/data/repoQueries/GetEventQueryImpl";
+import { ListEventsQueryImpl } from "../src/features/events/data/repoQueries/ListEventsQueryImpl";
 
 const FROM = "2026-11-01";
 const TO = "2026-11-30";

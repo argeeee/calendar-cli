@@ -1,10 +1,10 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import { google } from "googleapis";
-import { success } from "../../../../core/Result";
-import type { GoogleCalendarClient } from "../clients/GoogleCalendarClient";
-import type { GoogleEvent } from "../models/GoogleEvent";
-import { UpdateEventQueryImpl } from "./UpdateEventQueryImpl";
+import { success } from "../src/core/Result";
+import type { GoogleCalendarClient } from "../src/features/events/data/clients/GoogleCalendarClient";
+import type { GoogleEvent } from "../src/features/events/data/models/GoogleEvent";
+import { UpdateEventQueryImpl } from "../src/features/events/data/repoQueries/UpdateEventQueryImpl";
 
 const EVENT_ID = "conversion-test";
 const TITLE = "Conversion test";
