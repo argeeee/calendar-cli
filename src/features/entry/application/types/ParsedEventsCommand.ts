@@ -1,3 +1,5 @@
+import type { EventLookup } from "../../../events/domain/models/EventLookup";
+
 export type ParsedEventsCommand =
   | {
       kind: "events.list";
@@ -6,4 +8,5 @@ export type ParsedEventsCommand =
       limit: number;
       offset: number;
     }
-  | { kind: "events.labels.list" };
+  | { kind: "events.labels.list" }
+  | { kind: "events.get"; target: string | EventLookup };
