@@ -1,4 +1,4 @@
-import type { EventFailure } from "../../domain/failures/EventFailure";
+import type { EventFailure } from "../../../shared/domain/failures/EventFailure";
 
 export function createGoogleEventError(error: unknown): EventFailure {
   const status = typeof error === "object" && error !== null && "code" in error

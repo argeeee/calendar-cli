@@ -1,10 +1,10 @@
 import type { calendar_v3 } from "googleapis";
 import { failure, type Result, success } from "../../../../core";
 import type { Event } from "../../domain/entities/Event";
-import type { EventFailure } from "../../domain/failures/EventFailure";
+import type { EventFailure } from "../../../shared/domain/failures/EventFailure";
 import type { GetEventRequest } from "../../domain/models/GetEventRequest";
 import type { GetEventQuery } from "../../domain/repoQueries/GetEventQuery";
-import type { GoogleCalendarClient } from "../clients/GoogleCalendarClient";
+import type { GoogleCalendarClient } from "../../../shared/data/clients/GoogleCalendarClient";
 import { fromGoogleEvent } from "../mappers/fromGoogleEvent";
 import { createGoogleEventError } from "../mappers/googleEventErrorMapper";
 import { toGoogleEventRangeDateTime } from "../utils/toGoogleEventRangeDateTime";

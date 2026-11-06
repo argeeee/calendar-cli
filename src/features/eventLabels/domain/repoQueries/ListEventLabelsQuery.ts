@@ -1,5 +1,5 @@
 import type { RepoQuery, Result } from "../../../../core";
-import type { EventFailure } from "../failures/EventFailure";
+import type { EventFailure } from "../../../shared/domain/failures/EventFailure";
 import type { EventLabel } from "../models/EventLabel";
 import type { ListEventLabelsRequest } from "../models/ListEventLabelsRequest";
 

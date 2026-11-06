@@ -1,10 +1,10 @@
 import { failure, type Result, success } from "../../../../core";
-import type { EventFailure } from "../../domain/failures/EventFailure";
+import type { EventFailure } from "../../../shared/domain/failures/EventFailure";
 import type { EventLabel } from "../../domain/models/EventLabel";
 import type { ListEventLabelsRequest } from "../../domain/models/ListEventLabelsRequest";
 import type { ListEventLabelsQuery } from "../../domain/repoQueries/ListEventLabelsQuery";
-import type { GoogleCalendarClient } from "../clients/GoogleCalendarClient";
-import { createGoogleEventError } from "../mappers/googleEventErrorMapper";
+import type { GoogleCalendarClient } from "../../../shared/data/clients/GoogleCalendarClient";
+import { createGoogleEventError } from "../../../events/data/mappers/googleEventErrorMapper";
 
 export class ListEventLabelsQueryImpl implements ListEventLabelsQuery {
   public constructor(private readonly calendarClient: GoogleCalendarClient) {}

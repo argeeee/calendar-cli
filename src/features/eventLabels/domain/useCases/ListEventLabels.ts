@@ -1,6 +1,6 @@
 import type { Result, UseCase } from "../../../../core";
 import type { EventLabel } from "../models/EventLabel";
-import type { EventFailure } from "../failures/EventFailure";
+import type { EventFailure } from "../../../shared/domain/failures/EventFailure";
 import type { ListEventLabelsRequest } from "../models/ListEventLabelsRequest";
 import type { ListEventLabelsQuery } from "../repoQueries/ListEventLabelsQuery";
 

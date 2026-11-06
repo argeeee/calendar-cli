@@ -1,10 +1,10 @@
 import { failure, type Result, success } from "../../../../core";
-import type { EventFailure } from "../../domain/failures/EventFailure";
+import type { EventFailure } from "../../../shared/domain/failures/EventFailure";
 import type { EventListResult } from "../../domain/models/EventListResult";
 import { createEventListResult } from "../../domain/factories/createEventListResult";
 import type { ListEventsRequest } from "../../domain/models/ListEventsRequest";
 import type { ListEventsQuery } from "../../domain/repoQueries/ListEventsQuery";
-import type { GoogleCalendarClient } from "../clients/GoogleCalendarClient";
+import type { GoogleCalendarClient } from "../../../shared/data/clients/GoogleCalendarClient";
 import { fromGoogleEvent } from "../mappers/fromGoogleEvent";
 import { createGoogleEventError } from "../mappers/googleEventErrorMapper";
 import { toGoogleEventRangeDateTime } from "../utils/toGoogleEventRangeDateTime";

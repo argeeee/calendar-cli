@@ -1,9 +1,7 @@
 import { type calendar_v3, google } from "googleapis";
 import { failure, type Result, success } from "../../../../core";
-import type {
-  GoogleAuthorizationService,
-} from "../../../shared/application/googleAuthorization/GoogleAuthorizationService";
 import type { EventFailure } from "../../domain/failures/EventFailure";
+import type { GoogleAuthorizationService } from "../../application/googleAuthorization/GoogleAuthorizationService";
 
 export class GoogleCalendarClient {
   public constructor(

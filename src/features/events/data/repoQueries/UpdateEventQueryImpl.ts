@@ -1,9 +1,9 @@
 import { failure, type Result, success } from "../../../../core";
 import type { Event } from "../../domain/entities/Event";
-import type { EventFailure } from "../../domain/failures/EventFailure";
+import type { EventFailure } from "../../../shared/domain/failures/EventFailure";
 import type { UpdateEventRequest } from "../../domain/models/UpdateEventRequest";
 import type { UpdateEventQuery } from "../../domain/repoQueries/UpdateEventQuery";
-import type { GoogleCalendarClient } from "../clients/GoogleCalendarClient";
+import type { GoogleCalendarClient } from "../../../shared/data/clients/GoogleCalendarClient";
 import { fromGoogleEvent } from "../mappers/fromGoogleEvent";
 import { createGoogleEventError } from "../mappers/googleEventErrorMapper";
 import { toGoogleEvent } from "../mappers/toGoogleEvent";

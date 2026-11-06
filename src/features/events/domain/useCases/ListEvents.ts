@@ -1,6 +1,6 @@
 import type { Result, UseCase } from "../../../../core";
 import type { EventListResult } from "../models/EventListResult";
-import type { EventFailure } from "../failures/EventFailure";
+import type { EventFailure } from "../../../shared/domain/failures/EventFailure";
 import type { ListEventsRequest } from "../models/ListEventsRequest";
 import type { ListEventsQuery } from "../repoQueries/ListEventsQuery";
 

@@ -1,10 +1,10 @@
 import { failure, type Result } from "../../../../core";
 import type { Event } from "../../domain/entities/Event";
-import type { EventFailure } from "../../domain/failures/EventFailure";
+import type { EventFailure } from "../../../shared/domain/failures/EventFailure";
 import type { DeleteEventRequest } from "../../domain/models/DeleteEventRequest";
 import type { DeleteEventQuery } from "../../domain/repoQueries/DeleteEventQuery";
 import type { GetEventQuery } from "../../domain/repoQueries/GetEventQuery";
-import type { GoogleCalendarClient } from "../clients/GoogleCalendarClient";
+import type { GoogleCalendarClient } from "../../../shared/data/clients/GoogleCalendarClient";
 import { createGoogleEventError } from "../mappers/googleEventErrorMapper";
 
 export class DeleteEventQueryImpl implements DeleteEventQuery {

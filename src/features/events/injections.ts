@@ -1,16 +1,14 @@
 import { lazy } from "../../core";
 import { getGoogleAuthorizationService } from "../shared/injections";
-import { GoogleCalendarClient } from "./data/clients/GoogleCalendarClient";
+import { GoogleCalendarClient } from "../shared/data/clients/GoogleCalendarClient";
 import { CreateEventQueryImpl } from "./data/repoQueries/CreateEventQueryImpl";
 import { DeleteEventQueryImpl } from "./data/repoQueries/DeleteEventQueryImpl";
 import { GetEventQueryImpl } from "./data/repoQueries/GetEventQueryImpl";
-import { ListEventLabelsQueryImpl } from "./data/repoQueries/ListEventLabelsQueryImpl";
 import { ListEventsQueryImpl } from "./data/repoQueries/ListEventsQueryImpl";
 import { UpdateEventQueryImpl } from "./data/repoQueries/UpdateEventQueryImpl";
 import { CreateEvent } from "./domain/useCases/CreateEvent";
 import { DeleteEvent } from "./domain/useCases/DeleteEvent";
 import { GetEvent } from "./domain/useCases/GetEvent";
-import { ListEventLabels } from "./domain/useCases/ListEventLabels";
 import { ListEvents } from "./domain/useCases/ListEvents";
 import { UpdateEvent } from "./domain/useCases/UpdateEvent";
 
@@ -24,10 +22,6 @@ const getGetEventQuery = lazy(
 
 export const getListEvents = lazy(
   () => new ListEvents(new ListEventsQueryImpl(getCalendarClient())),
-);
-
-export const getListEventLabels = lazy(
-  () => new ListEventLabels(new ListEventLabelsQueryImpl(getCalendarClient())),
 );
 
 export const getEvent = lazy(

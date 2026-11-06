@@ -2,10 +2,10 @@ import {
   getCreateEvent,
   getDeleteEvent,
   getEvent,
-  getListEventLabels,
   getListEvents,
   getUpdateEvent,
 } from "../../events/injections";
+import { getListEventLabels } from "../../eventLabels/injections";
 import type { Result } from "../../../core";
 import type { ParsedEventsCommand } from "./types/ParsedEventsCommand";
 
