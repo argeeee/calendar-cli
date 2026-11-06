@@ -12,6 +12,11 @@ export class UpdateEventCommand extends Command<ParsedCommand> {
 
   constructor() {
     super();
+    this.argParser.addOption("calendar", {
+      help: "Calendar ID (default: primary)",
+      valueHelp: "id",
+      defaultsTo: "primary",
+    });
     this.argParser.addOption("id", { help: "Event ID", valueHelp: "id" });
     this.argParser.addOption("title", {
       abbr: "t",
@@ -46,6 +51,10 @@ export class UpdateEventCommand extends Command<ParsedCommand> {
 
   override run(): ParsedCommand {
     const args = requireArgResults(this);
+    const calendarId = args.option("calendar")?.trim();
+    if (!calendarId) {
+      this.usageException("--calendar must be a nonempty calendar ID.");
+    }
     const optionId = args.option("id");
     const [positionalId, ...unexpected] = args.rest;
     const id = optionId ?? positionalId;
@@ -101,6 +110,7 @@ export class UpdateEventCommand extends Command<ParsedCommand> {
 
     return {
       kind: "events.update",
+      calendarId,
       id,
       patch: createEventPatch(patch),
     };

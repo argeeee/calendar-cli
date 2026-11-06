@@ -1,1 +1,4 @@
-export type DeleteEventRequest = { id: string };
+export type DeleteEventRequest = {
+  calendarId?: string;
+  id: string;
+};

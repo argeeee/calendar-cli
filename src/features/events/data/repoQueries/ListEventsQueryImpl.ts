@@ -28,7 +28,7 @@ export class ListEventsQueryImpl implements ListEventsQuery {
       let pageToken: string | undefined;
       do {
         const page = await calendar.value.events.list({
-          calendarId: "primary",
+          calendarId: request.calendarId ?? "primary",
           timeMin: toGoogleEventRangeDateTime(request.from, "start"),
           timeMax: toGoogleEventRangeDateTime(request.to, "end"),
           singleEvents: true,

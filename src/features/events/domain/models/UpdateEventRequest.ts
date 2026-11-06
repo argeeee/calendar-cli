@@ -1,3 +1,7 @@
 import type { EventPatch } from "./EventPatch.ts";
 
-export type UpdateEventRequest = { id: string; patch: EventPatch };
+export type UpdateEventRequest = {
+  calendarId?: string;
+  id: string;
+  patch: EventPatch;
+};

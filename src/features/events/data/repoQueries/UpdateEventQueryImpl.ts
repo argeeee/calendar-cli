@@ -23,7 +23,7 @@ export class UpdateEventQueryImpl implements UpdateEventQuery {
     }
     try {
       const currentResponse = await calendar.value.events.get({
-        calendarId: "primary",
+        calendarId: request.calendarId ?? "primary",
         eventId: request.id,
       });
       const current = fromGoogleEvent(currentResponse.data);
@@ -47,7 +47,7 @@ export class UpdateEventQueryImpl implements UpdateEventQuery {
         current.eventLabelId !== undefined;
       if (replacesCustomLabel) {
         await calendar.value.events.patch({
-          calendarId: "primary",
+          calendarId: request.calendarId ?? "primary",
           eventId: request.id,
           eventLabelVersion: 1,
           requestBody: { eventLabelId: "" },
@@ -55,10 +55,14 @@ export class UpdateEventQueryImpl implements UpdateEventQuery {
       }
       const merged = { ...current, ...request.patch, start, end };
       const event = request.patch.colorId === undefined
-        ? await resolveGoogleEventLabel(calendar.value, merged)
+        ? await resolveGoogleEventLabel(
+          calendar.value,
+          merged,
+          request.calendarId ?? "primary",
+        )
         : withoutGoogleEventLabel(merged);
       const response = await calendar.value.events.patch({
-        calendarId: "primary",
+        calendarId: request.calendarId ?? "primary",
         eventId: request.id,
         requestBody: toGoogleEvent(event),
         ...(event.eventLabelId === undefined ? {} : { eventLabelVersion: 1 }),

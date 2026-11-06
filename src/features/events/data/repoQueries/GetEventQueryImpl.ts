@@ -22,7 +22,7 @@ export class GetEventQueryImpl implements GetEventQuery {
     try {
       if (typeof request.target === "string") {
         const response = await calendar.value.events.get({
-          calendarId: "primary",
+          calendarId: request.calendarId ?? "primary",
           eventId: request.target,
         });
         const event = fromGoogleEvent(response.data);
@@ -40,6 +40,7 @@ export class GetEventQueryImpl implements GetEventQuery {
         request.target.title,
         request.target.from,
         request.target.to,
+        request.calendarId ?? "primary",
       );
       if (matches.length === 0) {
         return failure({
@@ -74,12 +75,13 @@ export class GetEventQueryImpl implements GetEventQuery {
     title: string,
     from: string,
     to: string,
+    calendarId: string,
   ): Promise<Event[]> {
     const matches: Event[] = [];
     let pageToken: string | undefined;
     do {
       const page = await calendar.events.list({
-        calendarId: "primary",
+        calendarId,
         timeMin: toGoogleEventRangeDateTime(from, "start"),
         timeMax: toGoogleEventRangeDateTime(to, "end"),
         singleEvents: true,

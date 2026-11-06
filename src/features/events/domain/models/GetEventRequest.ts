@@ -1,3 +1,6 @@
 import type { EventLookup } from "./EventLookup.ts";
 
-export type GetEventRequest = { target: string | EventLookup };
+export type GetEventRequest = {
+  calendarId?: string;
+  target: string | EventLookup;
+};

@@ -33,9 +33,10 @@ export class CreateEventQueryImpl implements CreateEventQuery {
       const event = await resolveGoogleEventLabel(
         calendar.value,
         request.event,
+        request.calendarId ?? "primary",
       );
       const response = await calendar.value.events.insert({
-        calendarId: "primary",
+        calendarId: request.calendarId ?? "primary",
         requestBody: toGoogleEvent(event),
         ...(event.eventLabelId === undefined ? {} : { eventLabelVersion: 1 }),
       });

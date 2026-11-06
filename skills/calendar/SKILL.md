@@ -1,6 +1,6 @@
 ---
 name: calendar
-description: Manage events in the authenticated Google account's primary calendar with the bundled calendar CLI. Use for listing, finding, creating, updating, or deleting calendar events.
+description: Manage Google calendars and events with the bundled calendar CLI. Use for listing, finding, creating, updating, or deleting calendars and events; primary is the default calendar.
 ---
 
 # Calendar CLI
@@ -11,7 +11,7 @@ Run commands from this skill directory so the bundled `calendar.js`, `.env`, and
 node calendar.js events <action> [options]
 ```
 
-The CLI supports Google Calendar events only. It uses the authenticated account's primary calendar and requires the Google Calendar API. Set `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in the environment or a `.env` file in this directory. On first use, the CLI opens a browser for OAuth consent and saves credentials under `.calendar/`. Keep credentials and token files out of commands, output, and version control.
+The CLI manages Google calendars and events and requires the Google Calendar API. Commands select the authenticated account's primary calendar unless a calendar ID is supplied. Set `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` in the environment or a `.env` file in this directory. On first use, the CLI opens a browser for OAuth consent and saves credentials under `.calendar/`. Keep credentials and token files out of commands, output, and version control.
 
 ## Input rules
 
@@ -19,7 +19,8 @@ The CLI supports Google Calendar events only. It uses the authenticated account'
 - Date-only values create all-day events. For all-day events, Google Calendar treats the end date as exclusive; for example, `--start 2026-11-06 --end 2026-11-07` creates a one-day event on November 6.
 - For create, start and end must both be dates or both be date-times. When both are supplied to update, they must use the same form.
 - Quote titles, descriptions, and locations containing spaces or shell-special characters.
-- Event colors are event-label names or IDs configured on the primary calendar. Use `events labels` to see available labels.
+- All event commands and `labels list` accept `--calendar <calendar-id>` and default to `primary` when omitted.
+- Event colors are event-label names or IDs configured on the selected calendar. Use `labels list [--calendar <calendar-id>]` to see available labels.
 
 ## Help
 
@@ -27,6 +28,33 @@ The CLI supports Google Calendar events only. It uses the authenticated account'
 node calendar.js --help
 node calendar.js events --help
 node calendar.js events create --help
+```
+
+## Manage calendars
+
+```bash
+node calendar.js calendars list
+node calendar.js calendars get [--calendar <calendar-id>]
+node calendar.js calendars create --summary <name> [--description <text>] [--location <text>] [--time-zone <iana-zone>]
+node calendar.js calendars update [--calendar <calendar-id>] [--summary <name>] [--description <text>] [--location <text>] [--time-zone <iana-zone>]
+node calendar.js calendars delete --calendar <calendar-id> --yes
+```
+
+`list` returns the authenticated account's calendar list. Use its IDs with
+`--calendar` on calendar, event, and label commands. `get`, `update`, and `delete`
+also accept a positional calendar ID and default to `primary` when omitted.
+`create` creates a secondary calendar. `update` requires at least one field;
+empty descriptions and locations clear those fields. Time zones use IANA names
+such as `Europe/Rome`.
+
+The primary calendar cannot be deleted, including by its actual calendar ID.
+Deleting a secondary calendar deletes its events and requires `--yes`. Obtain
+fresh explicit confirmation naming the calendar or ID before running deletion.
+
+```bash
+node calendar.js calendars create --summary "Work" --time-zone Europe/Rome
+node calendar.js events list --calendar calendar-id --from 2026-11-01 --to 2026-11-30
+node calendar.js labels list --calendar calendar-id
 ```
 
 ## List events
@@ -45,7 +73,7 @@ node calendar.js events list --from 2026-11-06T00:00:00+01:00 --to 2026-11-06T23
 ## List event labels
 
 ```bash
-node calendar.js events labels
+node calendar.js labels list [--calendar <calendar-id>]
 ```
 
 Returns configured event-label IDs, optional names, and color values. Use a label name or ID with `--color` when creating or updating an event.

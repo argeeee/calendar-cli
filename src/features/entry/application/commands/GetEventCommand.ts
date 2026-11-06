@@ -10,6 +10,11 @@ export class GetEventCommand extends Command<ParsedCommand> {
 
   constructor() {
     super();
+    this.argParser.addOption("calendar", {
+      help: "Calendar ID (default: primary)",
+      valueHelp: "id",
+      defaultsTo: "primary",
+    });
     this.argParser.addOption("id", {
       help: "Event ID",
       valueHelp: "id",
@@ -31,6 +36,10 @@ export class GetEventCommand extends Command<ParsedCommand> {
 
   override run(): ParsedCommand {
     const args = requireArgResults(this);
+    const calendarId = args.option("calendar")?.trim();
+    if (!calendarId) {
+      this.usageException("--calendar must be a nonempty calendar ID.");
+    }
     const id = args.option("id");
     const title = args.option("title");
     const fromValue = args.option("from");
@@ -49,7 +58,7 @@ export class GetEventCommand extends Command<ParsedCommand> {
       if (target === undefined || target.length === 0) {
         this.usageException("An event ID is required.");
       }
-      return { kind: "events.get", target };
+      return { kind: "events.get", calendarId, target };
     }
 
     if (title === null || fromValue === null || toValue === null) {
@@ -63,6 +72,6 @@ export class GetEventCommand extends Command<ParsedCommand> {
     }
 
     const lookup: EventLookup = { title, from, to };
-    return { kind: "events.get", target: lookup };
+    return { kind: "events.get", calendarId, target: lookup };
   }
 }

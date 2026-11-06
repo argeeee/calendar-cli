@@ -10,6 +10,11 @@ export class ListEventsCommand extends Command<ParsedCommand> {
 
   constructor() {
     super();
+    this.argParser.addOption("calendar", {
+      help: "Calendar ID (default: primary)",
+      valueHelp: "id",
+      defaultsTo: "primary",
+    });
     this.argParser.addOption("from", {
       help:
         "Inclusive range start (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss[.fraction] with Z or ±HH:mm; fraction is 1–3 digits)",
@@ -36,6 +41,10 @@ export class ListEventsCommand extends Command<ParsedCommand> {
 
   override run(): ParsedCommand {
     const args = requireArgResults(this);
+    const calendarId = args.option("calendar")?.trim();
+    if (!calendarId) {
+      this.usageException("--calendar must be a nonempty calendar ID.");
+    }
     const from = normalizeDate(args.option("from"));
     const to = normalizeDate(args.option("to"));
     if (from === undefined || to === undefined) {
@@ -51,6 +60,6 @@ export class ListEventsCommand extends Command<ParsedCommand> {
     if (args.rest.length > 0) {
       this.usageException("Unexpected positional argument.");
     }
-    return { kind: "events.list", from, to, limit, offset };
+    return { kind: "events.list", calendarId, from, to, limit, offset };
   }
 }

@@ -1,1 +1,3 @@
-export type ListEventLabelsRequest = Record<string, never>;
+export type ListEventLabelsRequest = {
+  calendarId?: string;
+};

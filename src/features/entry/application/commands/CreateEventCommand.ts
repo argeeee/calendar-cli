@@ -11,6 +11,11 @@ export class CreateEventCommand extends Command<ParsedCommand> {
 
   constructor() {
     super();
+    this.argParser.addOption("calendar", {
+      help: "Calendar ID (default: primary)",
+      valueHelp: "id",
+      defaultsTo: "primary",
+    });
     this.argParser.addOption("title", {
       abbr: "t",
       help: "Event title",
@@ -44,6 +49,10 @@ export class CreateEventCommand extends Command<ParsedCommand> {
 
   override run(): ParsedCommand {
     const args = requireArgResults(this);
+    const calendarId = args.option("calendar")?.trim();
+    if (!calendarId) {
+      this.usageException("--calendar must be a nonempty calendar ID.");
+    }
     const title = args.option("title");
     const startValue = args.option("start");
     const endValue = args.option("end");
@@ -72,6 +81,7 @@ export class CreateEventCommand extends Command<ParsedCommand> {
 
     return {
       kind: "events.create",
+      calendarId,
       event: createEventInput(
         title,
         start,

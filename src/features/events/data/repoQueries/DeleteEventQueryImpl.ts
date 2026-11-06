@@ -16,7 +16,10 @@ export class DeleteEventQueryImpl implements DeleteEventQuery {
   public async query(
     request: DeleteEventRequest,
   ): Promise<Result<Event, EventFailure>> {
-    const existing = await this.getEvent.query({ target: request.id });
+    const existing = await this.getEvent.query({
+      target: request.id,
+      calendarId: request.calendarId ?? "primary",
+    });
     if (!existing.hasValue) {
       return existing;
     }
@@ -26,7 +29,7 @@ export class DeleteEventQueryImpl implements DeleteEventQuery {
     }
     try {
       await calendar.value.events.delete({
-        calendarId: "primary",
+        calendarId: request.calendarId ?? "primary",
         eventId: request.id,
       });
       return existing;

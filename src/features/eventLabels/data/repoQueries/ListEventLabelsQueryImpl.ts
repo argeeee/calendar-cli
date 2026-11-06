@@ -10,7 +10,7 @@ export class ListEventLabelsQueryImpl implements ListEventLabelsQuery {
   public constructor(private readonly calendarClient: GoogleCalendarClient) {}
 
   public async query(
-    _input: ListEventLabelsRequest,
+    input: ListEventLabelsRequest,
   ): Promise<Result<EventLabel[], EventFailure>> {
     const calendar = await this.calendarClient.get();
     if (!calendar.hasValue) {
@@ -18,7 +18,7 @@ export class ListEventLabelsQueryImpl implements ListEventLabelsQuery {
     }
     try {
       const response = await calendar.value.calendars.get({
-        calendarId: "primary",
+        calendarId: input.calendarId ?? "primary",
       });
       const labels = (response.data.labelProperties?.eventLabels ?? []).flatMap(
         (label): EventLabel[] => {

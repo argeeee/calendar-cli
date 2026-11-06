@@ -1,9 +1,9 @@
 # Calendar CLI
 
-Manage calendar events with the `events` command:
+Manage Google calendars, events, and event labels:
 
 ```sh
-npm run dev -- events <command> [options]
+npm run dev -- <calendars|events|labels> <command> [options]
 ```
 
 ## Google Calendar setup
@@ -13,6 +13,43 @@ for the project and create OAuth client credentials to obtain a `GOOGLE_CLIENT_I
 `GOOGLE_CLIENT_SECRET`. Set both values in your environment or in a `.env` file in the
 project directory. On first use, the CLI opens a browser for Google authorization and
 saves the credentials under `.calendar/`.
+
+## Calendar commands
+
+Calendar management follows the same command structure as events:
+
+```sh
+npm run dev -- calendars list
+npm run dev -- calendars get
+npm run dev -- calendars get --calendar calendar-id
+npm run dev -- calendars create --summary "Work" --description "Team schedule" --time-zone Europe/Rome
+npm run dev -- calendars update --calendar calendar-id --summary "Updated name"
+npm run dev -- calendars delete --calendar calendar-id --yes
+```
+
+`list` returns the calendars in the authenticated account's calendar list. `create`
+creates a secondary calendar and requires `--summary`. Optional fields are
+`--description`, `--location`, and `--time-zone` (an IANA time zone).
+
+`get`, `update`, and `delete` accept an ID with `--calendar` or as a positional
+argument; omission selects `primary`. Updates require at least one of `--summary`,
+`--description`, `--location`, or `--time-zone`. Empty description or location values
+clear those fields.
+
+Calendar deletion requires `--yes` and deletes the calendar and its events. The
+primary calendar cannot be deleted, whether addressed as `primary` or by its actual ID.
+
+## Calendar selection
+
+All event commands and `labels list` accept `--calendar <calendar-id>`. Commands use
+`primary` when this option is omitted. Use `calendars list` to find calendar IDs.
+Labels and event colors are resolved in the selected calendar.
+
+```sh
+npm run dev -- events list --calendar calendar-id --from 2026-11-01 --to 2026-11-30
+npm run dev -- events get evt_123 --calendar calendar-id
+npm run dev -- labels list --calendar calendar-id
+```
 
 ## Event commands
 
