@@ -6,6 +6,14 @@ Manage calendar events with the `events` command:
 npm run dev -- events <command> [options]
 ```
 
+## Google Calendar setup
+
+Before using the commands, configure a Google Cloud project. Enable the Google Calendar API
+for the project and create OAuth client credentials to obtain a `GOOGLE_CLIENT_ID` and
+`GOOGLE_CLIENT_SECRET`. Set both values in your environment or in a `.env` file in the
+project directory. On first use, the CLI opens a browser for Google authorization and
+saves the credentials under `.calendar/`.
+
 ## Event commands
 
 ### List events
