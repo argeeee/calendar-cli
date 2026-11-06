@@ -6,7 +6,7 @@ import { failure, type Result, success } from "../../../../core";
 import type { GoogleCalendarClient } from "../clients/GoogleCalendarClient";
 import { toGoogleEventRangeDateTime } from "../utils/googleEventDate";
 import { createGoogleEventError } from "../mappers/googleEventErrorMapper";
-import { fromGoogleEvent } from "../mappers/googleEventMapper";
+import { fromGoogleEvent } from "../mappers/fromGoogleEvent";
 import type { Event } from "../../domain/entities/Event";
 import type { EventFailure } from "../../domain/failures/EventFailure";
 import type { GetEventRequest } from "../../domain/models/GetEventRequest";

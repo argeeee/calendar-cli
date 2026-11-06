@@ -5,10 +5,8 @@ import { failure, type Result, success } from "../../../../core";
 import type { GoogleCalendarClient } from "../clients/GoogleCalendarClient";
 import { isGoogleEventDateOnly } from "../utils/googleEventDate";
 import { createGoogleEventError } from "../mappers/googleEventErrorMapper";
-import {
-  fromGoogleEvent,
-  toGoogleEvent,
-} from "../mappers/googleEventMapper";
+import { fromGoogleEvent } from "../mappers/fromGoogleEvent";
+import { toGoogleEvent } from "../mappers/toGoogleEvent";
 import { resolveGoogleEventLabel } from "../utils/resolveGoogleEventLabel";
 import { withoutGoogleEventLabel } from "../utils/withoutGoogleEventLabel";
 import type { Event } from "../../domain/entities/Event";
