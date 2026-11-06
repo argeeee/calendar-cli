@@ -1,5 +1,6 @@
 import { Command } from "@argetim/arg-parser/command_runner";
 import { createEventInput } from "../../../events/domain/factories/createEventInput";
+import { isDateOnly } from "../utils/isDateOnly";
 import { normalizeDate } from "../utils/normalizeDate";
 import { requireArgResults } from "../utils/requireArgResults";
 import type { ParsedEventsCommand } from "../types/ParsedEventsCommand";
@@ -82,8 +83,4 @@ export class CreateEventCommand extends Command<ParsedEventsCommand> {
       ),
     };
   }
-}
-
-function isDateOnly(value: string): boolean {
-  return /^\d{4}-\d{2}-\d{2}$/.test(value);
 }
