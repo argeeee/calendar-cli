@@ -64,10 +64,18 @@ export class UpdateEventCommand extends Command<ParsedEventsCommand> {
     const description = args.option("description");
     const location = args.option("location");
     const color = args.option("color");
-    if (title !== null) patch.title = title;
-    if (description !== null) patch.description = description;
-    if (location !== null) patch.location = location;
-    if (color !== null) patch.eventLabelId = color;
+    if (title !== null) {
+      patch.title = title;
+    }
+    if (description !== null) {
+      patch.description = description;
+    }
+    if (location !== null) {
+      patch.location = location;
+    }
+    if (color !== null) {
+      patch.eventLabelId = color;
+    }
 
     const startValue = args.option("start");
     const endValue = args.option("end");
