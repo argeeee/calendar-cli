@@ -4,7 +4,6 @@ import type { Event } from "../../domain/entities/Event";
 import type { EventFailure } from "../../domain/failures/EventFailure";
 import type { GetEventRequest } from "../../domain/models/GetEventRequest";
 import type { GetEventQuery } from "../../domain/repoQueries/GetEventQuery";
-import type { GoogleEventListMethod } from "../models/GoogleEventListMethod";
 import type { GoogleCalendarClient } from "../clients/GoogleCalendarClient";
 import { fromGoogleEvent } from "../mappers/fromGoogleEvent";
 import { createGoogleEventError } from "../mappers/googleEventErrorMapper";
@@ -79,8 +78,7 @@ export class GetEventQueryImpl implements GetEventQuery {
     const matches: Event[] = [];
     let pageToken: string | undefined;
     do {
-      const listEvents = calendar.events.list as GoogleEventListMethod;
-      const page = await listEvents({
+      const page = await calendar.events.list({
         calendarId: "primary",
         timeMin: toGoogleEventRangeDateTime(from, "start"),
         timeMax: toGoogleEventRangeDateTime(to, "end"),

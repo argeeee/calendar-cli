@@ -4,7 +4,6 @@ import type { EventListResult } from "../../domain/models/EventListResult";
 import { createEventListResult } from "../../domain/factories/createEventListResult";
 import type { ListEventsRequest } from "../../domain/models/ListEventsRequest";
 import type { ListEventsQuery } from "../../domain/repoQueries/ListEventsQuery";
-import type { GoogleEventListMethod } from "../models/GoogleEventListMethod";
 import type { GoogleCalendarClient } from "../clients/GoogleCalendarClient";
 import { fromGoogleEvent } from "../mappers/fromGoogleEvent";
 import { createGoogleEventError } from "../mappers/googleEventErrorMapper";
@@ -28,8 +27,7 @@ export class ListEventsQueryImpl implements ListEventsQuery {
       let skipped = 0;
       let pageToken: string | undefined;
       do {
-        const listEvents = calendar.value.events.list as GoogleEventListMethod;
-        const page = await listEvents({
+        const page = await calendar.value.events.list({
           calendarId: "primary",
           timeMin: toGoogleEventRangeDateTime(request.from, "start"),
           timeMax: toGoogleEventRangeDateTime(request.to, "end"),

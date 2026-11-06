@@ -4,6 +4,7 @@
   "description": "",
   "type": "module",
   "scripts": {
+    "test": "node --import tsx --test src/**/*.test.ts",
     "dev": "tsx src/index.ts",
     "build": "esbuild src/index.ts --bundle --platform=node --format=esm --packages=external --sourcemap --outdir=dist",
     "typecheck": "tsc --noEmit -p tsconfig.json",

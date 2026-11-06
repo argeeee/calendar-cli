@@ -8,10 +8,13 @@ export function toGoogleEvent(event: CreateEventRequest["event"]): GoogleEvent {
 
   return {
     summary: event.title,
-    start: allDay ? { date: event.start } : { dateTime: event.start },
+    // Explicit nulls clear the previous representation during PATCH updates.
+    start: allDay
+      ? { date: event.start, dateTime: null }
+      : { date: null, dateTime: event.start },
     end: allDay
-      ? { date: addGoogleEventDays(event.end, 1) }
-      : { dateTime: event.end },
+      ? { date: addGoogleEventDays(event.end, 1), dateTime: null }
+      : { date: null, dateTime: event.end },
     ...(event.description === undefined
       ? {}
       : { description: event.description }),
