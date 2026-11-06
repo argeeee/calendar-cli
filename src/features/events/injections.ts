@@ -14,11 +14,37 @@ import { ListEventLabels } from "./domain/useCases/ListEventLabels";
 import { ListEvents } from "./domain/useCases/ListEvents";
 import { UpdateEvent } from "./domain/useCases/UpdateEvent";
 
-const getCalendarClient = lazy(() => new GoogleCalendarClient(getGoogleAuthorizationService()));
-const getGetEventQuery = lazy(() => new GetEventQueryImpl(getCalendarClient()));
-export const getListEvents = lazy(() => new ListEvents(new ListEventsQueryImpl(getCalendarClient())));
-export const getListEventLabels = lazy(() => new ListEventLabels(new ListEventLabelsQueryImpl(getCalendarClient())));
-export const getEvent = lazy(() => new GetEvent(getGetEventQuery()));
-export const getCreateEvent = lazy(() => new CreateEvent(new CreateEventQueryImpl(getCalendarClient())));
-export const getUpdateEvent = lazy(() => new UpdateEvent(new UpdateEventQueryImpl(getCalendarClient())));
-export const getDeleteEvent = lazy(() => new DeleteEvent(new DeleteEventQueryImpl(getCalendarClient(), getGetEventQuery())));
+const getCalendarClient = lazy(
+  () => new GoogleCalendarClient(getGoogleAuthorizationService()),
+);
+
+const getGetEventQuery = lazy(
+  () => new GetEventQueryImpl(getCalendarClient()),
+);
+
+export const getListEvents = lazy(
+  () => new ListEvents(new ListEventsQueryImpl(getCalendarClient())),
+);
+
+export const getListEventLabels = lazy(
+  () => new ListEventLabels(new ListEventLabelsQueryImpl(getCalendarClient())),
+);
+
+export const getEvent = lazy(
+  () => new GetEvent(getGetEventQuery()),
+);
+
+export const getCreateEvent = lazy(
+  () => new CreateEvent(new CreateEventQueryImpl(getCalendarClient())),
+);
+
+export const getUpdateEvent = lazy(
+  () => new UpdateEvent(new UpdateEventQueryImpl(getCalendarClient())),
+);
+
+export const getDeleteEvent = lazy(
+  () =>
+    new DeleteEvent(
+      new DeleteEventQueryImpl(getCalendarClient(), getGetEventQuery()),
+    ),
+);
