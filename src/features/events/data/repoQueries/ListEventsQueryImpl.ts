@@ -9,7 +9,7 @@ import { createGoogleEventError } from "../mappers/googleEventErrorMapper";
 import { fromGoogleEvent } from "../mappers/fromGoogleEvent";
 import type { EventFailure } from "../../domain/failures/EventFailure";
 import type { EventListResult } from "../../domain/models/EventListResult";
-import { createEventListResult } from "../../domain/factories/eventFactory";
+import { createEventListResult } from "../../domain/factories/createEventListResult";
 import type {
   ListEventsRequest,
 } from "../../domain/models/ListEventsRequest";

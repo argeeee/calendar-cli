@@ -4,7 +4,9 @@ import type { EventFailure } from "../failures/EventFailure";
 import type { GetEventRequest } from "../models/GetEventRequest";
 import type { GetEventQuery } from "../repoQueries/GetEventQuery";
 
-export class GetEvent implements UseCase<GetEventRequest, Event, EventFailure> {
+export class GetEvent
+  implements UseCase<GetEventRequest, Event, EventFailure>
+{
   constructor(private readonly getEventQuery: GetEventQuery) {}
 
   execute(input: GetEventRequest): Promise<Result<Event, EventFailure>> {

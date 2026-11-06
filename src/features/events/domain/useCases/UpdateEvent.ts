@@ -4,7 +4,9 @@ import type { EventFailure } from "../failures/EventFailure";
 import type { UpdateEventRequest } from "../models/UpdateEventRequest";
 import type { UpdateEventQuery } from "../repoQueries/UpdateEventQuery";
 
-export class UpdateEvent implements UseCase<UpdateEventRequest, Event, EventFailure> {
+export class UpdateEvent
+  implements UseCase<UpdateEventRequest, Event, EventFailure>
+{
   constructor(private readonly updateEventQuery: UpdateEventQuery) {}
 
   execute(input: UpdateEventRequest): Promise<Result<Event, EventFailure>> {

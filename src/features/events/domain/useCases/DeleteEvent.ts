@@ -4,7 +4,9 @@ import type { EventFailure } from "../failures/EventFailure";
 import type { DeleteEventRequest } from "../models/DeleteEventRequest";
 import type { DeleteEventQuery } from "../repoQueries/DeleteEventQuery";
 
-export class DeleteEvent implements UseCase<DeleteEventRequest, Event, EventFailure> {
+export class DeleteEvent
+  implements UseCase<DeleteEventRequest, Event, EventFailure>
+{
   constructor(private readonly deleteEventQuery: DeleteEventQuery) {}
 
   execute(input: DeleteEventRequest): Promise<Result<Event, EventFailure>> {
