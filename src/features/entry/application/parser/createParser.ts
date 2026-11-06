@@ -5,6 +5,7 @@ import { CreateEventCommand } from "../commands/CreateEventCommand";
 import { ListEventsCommand } from "../commands/ListEventsCommand";
 import { UpdateEventCommand } from "../commands/UpdateEventCommand";
 import { ListEventLabelsCommand } from "../commands/ListEventLabelsCommand";
+import { DeleteEventCommand } from "../commands/DeleteEventCommand";
 import type { ParsedEventsCommand } from "../types/ParsedEventsCommand";
 
 export type { ParsedEventsCommand } from "../types/ParsedEventsCommand";
@@ -20,6 +21,7 @@ export function createParser(): CommandRunner<ParsedEventsCommand> {
   events.addSubcommand(new CreateEventCommand());
   events.addSubcommand(new ListEventLabelsCommand());
   events.addSubcommand(new UpdateEventCommand());
+  events.addSubcommand(new DeleteEventCommand());
   runner.addCommand(events);
   return runner;
 }
