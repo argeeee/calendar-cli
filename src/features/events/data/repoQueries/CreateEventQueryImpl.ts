@@ -1,18 +1,14 @@
-import type {
-  CreateEventQuery,
-} from "../../domain/repoQueries/CreateEventQuery";
 import { failure, type Result, success } from "../../../../core";
-import type { GoogleCalendarClient } from "../clients/GoogleCalendarClient";
-import { isGoogleEventDateOnly } from "../utils/isGoogleEventDateOnly";
-import { createGoogleEventError } from "../mappers/googleEventErrorMapper";
-import { fromGoogleEvent } from "../mappers/fromGoogleEvent";
-import { toGoogleEvent } from "../mappers/toGoogleEvent";
-import { resolveGoogleEventLabel } from "../utils/resolveGoogleEventLabel";
 import type { Event } from "../../domain/entities/Event";
 import type { EventFailure } from "../../domain/failures/EventFailure";
-import type {
-  CreateEventRequest,
-} from "../../domain/models/CreateEventRequest";
+import type { CreateEventRequest } from "../../domain/models/CreateEventRequest";
+import type { CreateEventQuery } from "../../domain/repoQueries/CreateEventQuery";
+import type { GoogleCalendarClient } from "../clients/GoogleCalendarClient";
+import { fromGoogleEvent } from "../mappers/fromGoogleEvent";
+import { createGoogleEventError } from "../mappers/googleEventErrorMapper";
+import { toGoogleEvent } from "../mappers/toGoogleEvent";
+import { isGoogleEventDateOnly } from "../utils/isGoogleEventDateOnly";
+import { resolveGoogleEventLabel } from "../utils/resolveGoogleEventLabel";
 
 export class CreateEventQueryImpl implements CreateEventQuery {
   public constructor(private readonly calendarClient: GoogleCalendarClient) {}
@@ -30,7 +26,9 @@ export class CreateEventQueryImpl implements CreateEventQuery {
       });
     }
     const calendar = await this.calendarClient.get();
-    if (!calendar.hasValue) return calendar;
+    if (!calendar.hasValue) {
+      return calendar;
+    }
     try {
       const event = await resolveGoogleEventLabel(
         calendar.value,
@@ -42,10 +40,14 @@ export class CreateEventQueryImpl implements CreateEventQuery {
         ...(event.eventLabelId === undefined ? {} : { eventLabelVersion: 1 }),
       });
       const created = fromGoogleEvent(response.data);
-      return created ? success(created) : failure({
-        type: "UNEXPECTED",
-        message: "Google Calendar returned an incomplete event.",
-      });
+      if (!created) {
+        return failure({
+          type: "UNEXPECTED",
+          message: "Google Calendar returned an incomplete event.",
+        });
+      }
+
+      return success(created);
     } catch (error) {
       return failure(createGoogleEventError(error));
     }

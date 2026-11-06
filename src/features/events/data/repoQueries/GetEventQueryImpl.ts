@@ -1,15 +1,14 @@
-import type {
-  GetEventQuery,
-} from "../../domain/repoQueries/GetEventQuery";
 import type { calendar_v3 } from "googleapis";
 import { failure, type Result, success } from "../../../../core";
-import type { GoogleCalendarClient } from "../clients/GoogleCalendarClient";
-import { toGoogleEventRangeDateTime } from "../utils/toGoogleEventRangeDateTime";
-import { createGoogleEventError } from "../mappers/googleEventErrorMapper";
-import { fromGoogleEvent } from "../mappers/fromGoogleEvent";
 import type { Event } from "../../domain/entities/Event";
 import type { EventFailure } from "../../domain/failures/EventFailure";
 import type { GetEventRequest } from "../../domain/models/GetEventRequest";
+import type { GetEventQuery } from "../../domain/repoQueries/GetEventQuery";
+import type { GoogleEventListMethod } from "../models/GoogleEventListMethod";
+import type { GoogleCalendarClient } from "../clients/GoogleCalendarClient";
+import { fromGoogleEvent } from "../mappers/fromGoogleEvent";
+import { createGoogleEventError } from "../mappers/googleEventErrorMapper";
+import { toGoogleEventRangeDateTime } from "../utils/toGoogleEventRangeDateTime";
 
 export class GetEventQueryImpl implements GetEventQuery {
   public constructor(private readonly calendarClient: GoogleCalendarClient) {}
@@ -18,19 +17,24 @@ export class GetEventQueryImpl implements GetEventQuery {
     request: GetEventRequest,
   ): Promise<Result<Event, EventFailure>> {
     const calendar = await this.calendarClient.get();
-    if (!calendar.hasValue) return calendar;
+    if (!calendar.hasValue) {
+      return calendar;
+    }
     try {
       if (typeof request.target === "string") {
-        const event = fromGoogleEvent(
-          (await calendar.value.events.get({
-            calendarId: "primary",
-            eventId: request.target,
-          })).data,
-        );
-        return event ? success(event) : failure({
-          type: "NOT_FOUND",
-          message: "The requested calendar event was not found.",
+        const response = await calendar.value.events.get({
+          calendarId: "primary",
+          eventId: request.target,
         });
+        const event = fromGoogleEvent(response.data);
+        if (!event) {
+          return failure({
+            type: "NOT_FOUND",
+            message: "The requested calendar event was not found.",
+          });
+        }
+
+        return success(event);
       }
       const matches = await this.findByTitle(
         calendar.value,
@@ -52,10 +56,15 @@ export class GetEventQueryImpl implements GetEventQuery {
               "--id.",
         });
       }
-      return matches[0] ? success(matches[0]) : failure({
-        type: "NOT_FOUND",
-        message: "No event matched that title in the requested range.",
-      });
+      const match = matches[0];
+      if (!match) {
+        return failure({
+          type: "NOT_FOUND",
+          message: "No event matched that title in the requested range.",
+        });
+      }
+
+      return success(match);
     } catch (error) {
       return failure(createGoogleEventError(error));
     }
@@ -70,7 +79,8 @@ export class GetEventQueryImpl implements GetEventQuery {
     const matches: Event[] = [];
     let pageToken: string | undefined;
     do {
-      const page = await (calendar.events.list as (params: calendar_v3.Params$Resource$Events$List) => Promise<{ data: calendar_v3.Schema$Events }> )({
+      const listEvents = calendar.events.list as GoogleEventListMethod;
+      const page = await listEvents({
         calendarId: "primary",
         timeMin: toGoogleEventRangeDateTime(from, "start"),
         timeMax: toGoogleEventRangeDateTime(to, "end"),
@@ -82,7 +92,9 @@ export class GetEventQueryImpl implements GetEventQuery {
       });
       for (const item of page.data.items ?? []) {
         const event = fromGoogleEvent(item);
-        if (event?.title === title) matches.push(event);
+        if (event?.title === title) {
+          matches.push(event);
+        }
       }
       pageToken = page.data.nextPageToken ?? undefined;
     } while (pageToken && matches.length < 2);

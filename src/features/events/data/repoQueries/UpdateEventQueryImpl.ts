@@ -1,19 +1,15 @@
-import type {
-  UpdateEventQuery,
-} from "../../domain/repoQueries/UpdateEventQuery";
 import { failure, type Result, success } from "../../../../core";
-import type { GoogleCalendarClient } from "../clients/GoogleCalendarClient";
-import { isGoogleEventDateOnly } from "../utils/isGoogleEventDateOnly";
-import { createGoogleEventError } from "../mappers/googleEventErrorMapper";
-import { fromGoogleEvent } from "../mappers/fromGoogleEvent";
-import { toGoogleEvent } from "../mappers/toGoogleEvent";
-import { resolveGoogleEventLabel } from "../utils/resolveGoogleEventLabel";
-import { withoutGoogleEventLabel } from "../utils/withoutGoogleEventLabel";
 import type { Event } from "../../domain/entities/Event";
 import type { EventFailure } from "../../domain/failures/EventFailure";
-import type {
-  UpdateEventRequest,
-} from "../../domain/models/UpdateEventRequest";
+import type { UpdateEventRequest } from "../../domain/models/UpdateEventRequest";
+import type { UpdateEventQuery } from "../../domain/repoQueries/UpdateEventQuery";
+import type { GoogleCalendarClient } from "../clients/GoogleCalendarClient";
+import { fromGoogleEvent } from "../mappers/fromGoogleEvent";
+import { createGoogleEventError } from "../mappers/googleEventErrorMapper";
+import { toGoogleEvent } from "../mappers/toGoogleEvent";
+import { isGoogleEventDateOnly } from "../utils/isGoogleEventDateOnly";
+import { resolveGoogleEventLabel } from "../utils/resolveGoogleEventLabel";
+import { withoutGoogleEventLabel } from "../utils/withoutGoogleEventLabel";
 
 export class UpdateEventQueryImpl implements UpdateEventQuery {
   public constructor(private readonly calendarClient: GoogleCalendarClient) {}
@@ -22,14 +18,15 @@ export class UpdateEventQueryImpl implements UpdateEventQuery {
     request: UpdateEventRequest,
   ): Promise<Result<Event, EventFailure>> {
     const calendar = await this.calendarClient.get();
-    if (!calendar.hasValue) return calendar;
+    if (!calendar.hasValue) {
+      return calendar;
+    }
     try {
-      const current = fromGoogleEvent(
-        (await calendar.value.events.get({
-          calendarId: "primary",
-          eventId: request.id,
-        })).data,
-      );
+      const currentResponse = await calendar.value.events.get({
+        calendarId: "primary",
+        eventId: request.id,
+      });
+      const current = fromGoogleEvent(currentResponse.data);
       if (!current) {
         return failure({
           type: "NOT_FOUND",
@@ -67,10 +64,14 @@ export class UpdateEventQueryImpl implements UpdateEventQuery {
         ...(event.eventLabelId === undefined ? {} : { eventLabelVersion: 1 }),
       });
       const updated = fromGoogleEvent(response.data);
-      return updated ? success(updated) : failure({
-        type: "UNEXPECTED",
-        message: "Google Calendar returned an incomplete event.",
-      });
+      if (!updated) {
+        return failure({
+          type: "UNEXPECTED",
+          message: "Google Calendar returned an incomplete event.",
+        });
+      }
+
+      return success(updated);
     } catch (error) {
       return failure(createGoogleEventError(error));
     }

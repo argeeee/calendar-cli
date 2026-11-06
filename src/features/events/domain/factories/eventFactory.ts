@@ -1,4 +1,4 @@
-export { createEventInput } from "./createEventInput.ts";
-export { createEventLookup } from "./createEventLookup.ts";
-export { createEventPatch } from "./createEventPatch.ts";
-export { createEventListResult } from "./createEventListResult.ts";
+export { createEventInput } from "./createEventInput";
+export { createEventLookup } from "./createEventLookup";
+export { createEventPatch } from "./createEventPatch";
+export { createEventListResult } from "./createEventListResult";
