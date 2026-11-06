@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "tsx src/index.ts",
     "test": "node --import tsx --test tests/**/*.test.ts",
-    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --minify --outdir=dist",
-    "export": "npm run build && mkdir -p skills/calendar && cp dist/index.js skills/calendar/calendar.js && if [ -f .env ]; then cp .env skills/calendar/.env; fi",
+    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --minify --banner:js='import { createRequire } from \"node:module\"; const require = createRequire(import.meta.url);' --outdir=dist",
+    "export": "npm run build && cp dist/index.js skills/calendar/calendar.js && if [ -f .env ]; then cp .env skills/calendar/.env; fi",
     "build:run": "node dist/index.js",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
