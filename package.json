@@ -6,9 +6,10 @@
   "scripts": {
     "dev": "tsx src/index.ts",
     "test": "node --import tsx --test tests/**/*.test.ts",
-    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --packages=external --sourcemap --outdir=dist",
-    "typecheck": "tsc --noEmit -p tsconfig.json",
-    "build:run": "node dist/index.js"
+    "build": "esbuild src/index.ts --bundle --platform=node --format=esm --minify --outdir=dist",
+    "export": "npm run build && mkdir -p skills/calendar && cp dist/index.js skills/calendar/calendar.js",
+    "build:run": "node dist/index.js",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
   },
   "repository": {
     "type": "git",
