@@ -81,6 +81,6 @@ npm run dev -- events delete --id evt_123 --yes
 Show event label names and IDs for use with `--color`:
 
 ```sh
-npm run dev -- events labels
+npm run dev -- labels list
 ```
 

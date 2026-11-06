@@ -7,10 +7,10 @@ import {
 } from "../../events/injections";
 import { getListEventLabels } from "../../eventLabels/injections";
 import type { Result } from "../../../core";
-import type { ParsedEventsCommand } from "./types/ParsedEventsCommand";
+import type { ParsedCommand } from "./types/ParsedCommand";
 
 export async function dispatchCommand(
-  command: ParsedEventsCommand,
+  command: ParsedCommand,
 ): Promise<void> {
   switch (command.kind) {
     case "events.list":
@@ -23,7 +23,7 @@ export async function dispatchCommand(
         }),
       );
       return;
-    case "events.labels.list":
+    case "labels.list":
       await presentResult(await getListEventLabels().execute({}));
       return;
     case "events.get":

@@ -1,8 +1,8 @@
 import { Command } from "@argetim/arg-parser/command_runner";
 import { requireArgResults } from "../utils/requireArgResults";
-import type { ParsedEventsCommand } from "../types/ParsedEventsCommand";
+import type { ParsedCommand } from "../types/ParsedCommand";
 
-export class DeleteEventCommand extends Command<ParsedEventsCommand> {
+export class DeleteEventCommand extends Command<ParsedCommand> {
   readonly name = "delete";
   readonly description = "Delete an event by ID.";
 
@@ -17,7 +17,7 @@ export class DeleteEventCommand extends Command<ParsedEventsCommand> {
     });
   }
 
-  override run(): ParsedEventsCommand {
+  override run(): ParsedCommand {
     const args = requireArgResults(this);
     const optionId = args.option("id");
     const [positionalId, ...unexpected] = args.rest;

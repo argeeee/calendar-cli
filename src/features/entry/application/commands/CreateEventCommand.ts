@@ -3,9 +3,9 @@ import { createEventInput } from "../../../events/domain/factories/createEventIn
 import { isDateOnly } from "../utils/isDateOnly";
 import { normalizeDate } from "../utils/normalizeDate";
 import { requireArgResults } from "../utils/requireArgResults";
-import type { ParsedEventsCommand } from "../types/ParsedEventsCommand";
+import type { ParsedCommand } from "../types/ParsedCommand";
 
-export class CreateEventCommand extends Command<ParsedEventsCommand> {
+export class CreateEventCommand extends Command<ParsedCommand> {
   readonly name = "create";
   readonly description = "Create an event.";
 
@@ -42,7 +42,7 @@ export class CreateEventCommand extends Command<ParsedEventsCommand> {
     });
   }
 
-  override run(): ParsedEventsCommand {
+  override run(): ParsedCommand {
     const args = requireArgResults(this);
     const title = args.option("title");
     const startValue = args.option("start");

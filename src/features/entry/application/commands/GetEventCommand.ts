@@ -2,9 +2,9 @@ import { Command } from "@argetim/arg-parser/command_runner";
 import type { EventLookup } from "../../../events/domain/models/EventLookup";
 import { normalizeDate } from "../utils/normalizeDate";
 import { requireArgResults } from "../utils/requireArgResults";
-import type { ParsedEventsCommand } from "../types/ParsedEventsCommand";
+import type { ParsedCommand } from "../types/ParsedCommand";
 
-export class GetEventCommand extends Command<ParsedEventsCommand> {
+export class GetEventCommand extends Command<ParsedCommand> {
   readonly name = "get";
   readonly description = "Get one event.";
 
@@ -29,7 +29,7 @@ export class GetEventCommand extends Command<ParsedEventsCommand> {
     });
   }
 
-  override run(): ParsedEventsCommand {
+  override run(): ParsedCommand {
     const args = requireArgResults(this);
     const id = args.option("id");
     const title = args.option("title");

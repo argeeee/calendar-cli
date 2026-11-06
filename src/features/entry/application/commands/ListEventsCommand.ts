@@ -2,9 +2,9 @@ import { Command } from "@argetim/arg-parser/command_runner";
 import { normalizeDate } from "../utils/normalizeDate";
 import { parseNonnegativeInteger } from "../utils/parseNonnegativeInteger";
 import { requireArgResults } from "../utils/requireArgResults";
-import type { ParsedEventsCommand } from "../types/ParsedEventsCommand";
+import type { ParsedCommand } from "../types/ParsedCommand";
 
-export class ListEventsCommand extends Command<ParsedEventsCommand> {
+export class ListEventsCommand extends Command<ParsedCommand> {
   readonly name = "list";
   readonly description = "List events.";
 
@@ -34,7 +34,7 @@ export class ListEventsCommand extends Command<ParsedEventsCommand> {
     });
   }
 
-  override run(): ParsedEventsCommand {
+  override run(): ParsedCommand {
     const args = requireArgResults(this);
     const from = normalizeDate(args.option("from"));
     const to = normalizeDate(args.option("to"));

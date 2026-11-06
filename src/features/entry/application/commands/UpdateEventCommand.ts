@@ -4,9 +4,9 @@ import type { EventPatch } from "../../../events/domain/models/EventPatch";
 import { isDateOnly } from "../utils/isDateOnly";
 import { normalizeDate } from "../utils/normalizeDate";
 import { requireArgResults } from "../utils/requireArgResults";
-import type { ParsedEventsCommand } from "../types/ParsedEventsCommand";
+import type { ParsedCommand } from "../types/ParsedCommand";
 
-export class UpdateEventCommand extends Command<ParsedEventsCommand> {
+export class UpdateEventCommand extends Command<ParsedCommand> {
   readonly name = "update";
   readonly description = "Update an event by ID.";
 
@@ -44,7 +44,7 @@ export class UpdateEventCommand extends Command<ParsedEventsCommand> {
     });
   }
 
-  override run(): ParsedEventsCommand {
+  override run(): ParsedCommand {
     const args = requireArgResults(this);
     const optionId = args.option("id");
     const [positionalId, ...unexpected] = args.rest;

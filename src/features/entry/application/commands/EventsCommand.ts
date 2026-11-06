@@ -1,7 +1,7 @@
 import { Command } from "@argetim/arg-parser/command_runner";
-import type { ParsedEventsCommand } from "../types/ParsedEventsCommand";
+import type { ParsedCommand } from "../types/ParsedCommand";
 
-export class EventsCommand extends Command<ParsedEventsCommand> {
+export class EventsCommand extends Command<ParsedCommand> {
   readonly name = "events";
   readonly description = "Commands for calendar events.";
 
