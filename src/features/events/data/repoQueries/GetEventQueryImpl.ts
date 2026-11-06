@@ -4,7 +4,7 @@ import type {
 import type { calendar_v3 } from "googleapis";
 import { failure, type Result, success } from "../../../../core";
 import type { GoogleCalendarClient } from "../clients/GoogleCalendarClient";
-import { toGoogleEventRangeDateTime } from "../utils/googleEventDate";
+import { toGoogleEventRangeDateTime } from "../utils/toGoogleEventRangeDateTime";
 import { createGoogleEventError } from "../mappers/googleEventErrorMapper";
 import { fromGoogleEvent } from "../mappers/fromGoogleEvent";
 import type { Event } from "../../domain/entities/Event";

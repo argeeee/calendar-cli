@@ -1,9 +1,7 @@
 import type { CreateEventRequest } from "../../domain/models/CreateEventRequest";
 import type { GoogleEvent } from "../models/GoogleEvent";
-import {
-  addGoogleEventDays,
-  isGoogleEventDateOnly,
-} from "../utils/googleEventDate";
+import { addGoogleEventDays } from "../utils/addGoogleEventDays";
+import { isGoogleEventDateOnly } from "../utils/isGoogleEventDateOnly";
 
 export function toGoogleEvent(event: CreateEventRequest["event"]): GoogleEvent {
   const allDay = isGoogleEventDateOnly(event.start);

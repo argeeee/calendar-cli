@@ -4,7 +4,7 @@ import type {
 } from "../../domain/repoQueries/ListEventsQuery";
 import { failure, type Result, success } from "../../../../core";
 import type { GoogleCalendarClient } from "../clients/GoogleCalendarClient";
-import { toGoogleEventRangeDateTime } from "../utils/googleEventDate";
+import { toGoogleEventRangeDateTime } from "../utils/toGoogleEventRangeDateTime";
 import { createGoogleEventError } from "../mappers/googleEventErrorMapper";
 import { fromGoogleEvent } from "../mappers/fromGoogleEvent";
 import type { EventFailure } from "../../domain/failures/EventFailure";

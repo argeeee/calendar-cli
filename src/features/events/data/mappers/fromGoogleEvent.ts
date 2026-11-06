@@ -1,6 +1,6 @@
 import type { Event } from "../../domain/entities/Event";
 import type { GoogleEvent } from "../models/GoogleEvent";
-import { addGoogleEventDays } from "../utils/googleEventDate";
+import { addGoogleEventDays } from "../utils/addGoogleEventDays";
 
 export function fromGoogleEvent(event: GoogleEvent): Event | undefined {
   if (!event.id || event.status === "cancelled" || !event.start || !event.end) {

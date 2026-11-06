@@ -1,8 +1,8 @@
-import type { Event } from "../../domain/entities/Event";
+import type { CreateEventRequest } from "../../domain/models/CreateEventRequest";
 
 export function withoutGoogleEventLabel(
-  event: Omit<Event, "id">,
-): Omit<Event, "id"> {
+  event: CreateEventRequest["event"],
+): CreateEventRequest["event"] {
   const { eventLabelId: _eventLabelId, ...withoutLabel } = event;
   return withoutLabel;
 }

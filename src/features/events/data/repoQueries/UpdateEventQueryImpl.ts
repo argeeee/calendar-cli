@@ -3,7 +3,7 @@ import type {
 } from "../../domain/repoQueries/UpdateEventQuery";
 import { failure, type Result, success } from "../../../../core";
 import type { GoogleCalendarClient } from "../clients/GoogleCalendarClient";
-import { isGoogleEventDateOnly } from "../utils/googleEventDate";
+import { isGoogleEventDateOnly } from "../utils/isGoogleEventDateOnly";
 import { createGoogleEventError } from "../mappers/googleEventErrorMapper";
 import { fromGoogleEvent } from "../mappers/fromGoogleEvent";
 import { toGoogleEvent } from "../mappers/toGoogleEvent";
