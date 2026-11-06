@@ -7,7 +7,7 @@ import type { GoogleCalendarClient } from "../clients/GoogleCalendarClient";
 import { toGoogleEventRangeDateTime } from "../utils/googleEventDate";
 import { createGoogleEventError } from "../mappers/googleEventErrorMapper";
 import { fromGoogleEvent } from "../mappers/googleEventMapper";
-import type { EventError } from "../../domain/errors/EventError";
+import type { EventFailure } from "../../domain/failures/EventFailure";
 import type { EventListResult } from "../../domain/models/EventListResult";
 import { createEventListResult } from "../../domain/factories/eventFactory";
 import type {
@@ -19,7 +19,7 @@ export class ListEventsQueryImpl implements ListEventsQuery {
 
   public async query(
     request: ListEventsRequest,
-  ): Promise<Result<EventListResult, EventError>> {
+  ): Promise<Result<EventListResult, EventFailure>> {
     if (request.limit === 0) {
       return success(createEventListResult([], request.limit, request.offset));
     }

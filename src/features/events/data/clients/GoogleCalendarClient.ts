@@ -3,20 +3,20 @@ import { failure, type Result, success } from "../../../../core";
 import type {
   GoogleAuthorizationService,
 } from "../../../shared/application/googleAuthorization/GoogleAuthorizationService";
-import type { EventError } from "../../domain/errors/EventError";
+import type { EventFailure } from "../../domain/failures/EventFailure";
 
 export class GoogleCalendarClient {
   public constructor(
     private readonly authorization: GoogleAuthorizationService,
   ) {}
 
-  public async get(): Promise<Result<calendar_v3.Calendar, EventError>> {
+  public async get(): Promise<Result<calendar_v3.Calendar, EventFailure>> {
     const client = await this.authorization.getAuthorizedClient();
     if (!client.hasValue) {
       return failure({
-        kind: client.error.type === "CONFIGURATION" ? "configuration" :
-          client.error.type === "AUTHORIZATION" ? "authorization" :
-          client.error.type === "NETWORK" ? "network" : "unexpected",
+        type: client.error.type === "CONFIGURATION" ? "CONFIGURATION" :
+          client.error.type === "AUTHORIZATION" ? "AUTHORIZATION" :
+          client.error.type === "NETWORK" ? "NETWORK" : "UNEXPECTED",
         message: client.error.message,
       });
     }

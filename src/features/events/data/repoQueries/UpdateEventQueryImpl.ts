@@ -12,7 +12,7 @@ import {
 import { resolveGoogleEventLabel } from "../utils/resolveGoogleEventLabel";
 import { withoutGoogleEventLabel } from "../utils/withoutGoogleEventLabel";
 import type { Event } from "../../domain/entities/Event";
-import type { EventError } from "../../domain/errors/EventError";
+import type { EventFailure } from "../../domain/failures/EventFailure";
 import type {
   UpdateEventRequest,
 } from "../../domain/models/UpdateEventRequest";
@@ -22,7 +22,7 @@ export class UpdateEventQueryImpl implements UpdateEventQuery {
 
   public async query(
     request: UpdateEventRequest,
-  ): Promise<Result<Event, EventError>> {
+  ): Promise<Result<Event, EventFailure>> {
     const calendar = await this.calendarClient.get();
     if (!calendar.hasValue) return calendar;
     try {
@@ -34,7 +34,7 @@ export class UpdateEventQueryImpl implements UpdateEventQuery {
       );
       if (!current) {
         return failure({
-          kind: "not-found",
+          type: "NOT_FOUND",
           message: "The requested calendar event was not found.",
         });
       }
@@ -42,7 +42,7 @@ export class UpdateEventQueryImpl implements UpdateEventQuery {
       const end = request.patch.end ?? current.end;
       if (isGoogleEventDateOnly(start) !== isGoogleEventDateOnly(end)) {
         return failure({
-          kind: "validation",
+          type: "VALIDATION",
           message:
             "Changing between all-day and timed events requires both --start " +
               "and --end.",
@@ -70,7 +70,7 @@ export class UpdateEventQueryImpl implements UpdateEventQuery {
       });
       const updated = fromGoogleEvent(response.data);
       return updated ? success(updated) : failure({
-        kind: "unexpected",
+        type: "UNEXPECTED",
         message: "Google Calendar returned an incomplete event.",
       });
     } catch (error) {

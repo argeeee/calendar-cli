@@ -8,7 +8,7 @@ import { toGoogleEventRangeDateTime } from "../utils/googleEventDate";
 import { createGoogleEventError } from "../mappers/googleEventErrorMapper";
 import { fromGoogleEvent } from "../mappers/googleEventMapper";
 import type { Event } from "../../domain/entities/Event";
-import type { EventError } from "../../domain/errors/EventError";
+import type { EventFailure } from "../../domain/failures/EventFailure";
 import type { GetEventRequest } from "../../domain/models/GetEventRequest";
 
 export class GetEventQueryImpl implements GetEventQuery {
@@ -16,7 +16,7 @@ export class GetEventQueryImpl implements GetEventQuery {
 
   public async query(
     request: GetEventRequest,
-  ): Promise<Result<Event, EventError>> {
+  ): Promise<Result<Event, EventFailure>> {
     const calendar = await this.calendarClient.get();
     if (!calendar.hasValue) return calendar;
     try {
@@ -28,7 +28,7 @@ export class GetEventQueryImpl implements GetEventQuery {
           })).data,
         );
         return event ? success(event) : failure({
-          kind: "not-found",
+          type: "NOT_FOUND",
           message: "The requested calendar event was not found.",
         });
       }
@@ -40,20 +40,20 @@ export class GetEventQueryImpl implements GetEventQuery {
       );
       if (matches.length === 0) {
         return failure({
-          kind: "not-found",
+          type: "NOT_FOUND",
           message: "No event matched that title in the requested range.",
         });
       }
       if (matches.length > 1) {
         return failure({
-          kind: "ambiguous",
+          type: "AMBIGUOUS",
           message:
             "More than one event matched that title. Narrow the range or use " +
               "--id.",
         });
       }
       return matches[0] ? success(matches[0]) : failure({
-        kind: "not-found",
+        type: "NOT_FOUND",
         message: "No event matched that title in the requested range.",
       });
     } catch (error) {

@@ -1,12 +1,12 @@
-import type { EventError } from "../../domain/errors/EventError";
+import type { EventFailure } from "../../domain/failures/EventFailure";
 
-export function createGoogleEventError(error: unknown): EventError {
+export function createGoogleEventError(error: unknown): EventFailure {
   const status = typeof error === "object" && error !== null && "code" in error
     ? Number(error.code)
     : undefined;
   if (status === 401) {
     return {
-      kind: "authorization",
+      type: "AUTHORIZATION",
       message:
         "Google authorization expired. Complete authorization in the browser " +
           "and try again.",
@@ -14,20 +14,20 @@ export function createGoogleEventError(error: unknown): EventError {
   }
   if (status === 403) {
     return {
-      kind: "permission",
+      type: "PERMISSION",
       message:
         "Your Google account does not have permission to manage this calendar.",
     };
   }
   if (status === 404) {
     return {
-      kind: "not-found",
+      type: "NOT_FOUND",
       message: "The requested calendar event was not found.",
     };
   }
   if (status !== undefined && status >= 400 && status < 500) {
     return {
-      kind: "validation",
+      type: "VALIDATION",
       message:
         "Google Calendar rejected this event request. Check the event values " +
           "and try again.",
@@ -38,14 +38,14 @@ export function createGoogleEventError(error: unknown): EventError {
     /network|fetch|ENOTFOUND|ECONNRESET/i.test(error.message)
   ) {
     return {
-      kind: "network",
+      type: "NETWORK",
       message:
         "Could not reach Google Calendar. Check your network connection and " +
           "try again.",
     };
   }
   return {
-    kind: "unexpected",
+    type: "UNEXPECTED",
     message: "Google Calendar could not complete the request.",
   };
 }

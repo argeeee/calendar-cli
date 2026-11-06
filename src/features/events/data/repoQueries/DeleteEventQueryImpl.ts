@@ -6,7 +6,7 @@ import type { GoogleCalendarClient } from "../clients/GoogleCalendarClient";
 import { createGoogleEventError } from "../mappers/googleEventErrorMapper";
 import { GetEventQueryImpl } from "./GetEventQueryImpl";
 import type { Event } from "../../domain/entities/Event";
-import type { EventError } from "../../domain/errors/EventError";
+import type { EventFailure } from "../../domain/failures/EventFailure";
 import type {
   DeleteEventRequest,
 } from "../../domain/models/DeleteEventRequest";
@@ -19,7 +19,7 @@ export class DeleteEventQueryImpl implements DeleteEventQuery {
 
   public async query(
     request: DeleteEventRequest,
-  ): Promise<Result<Event, EventError>> {
+  ): Promise<Result<Event, EventFailure>> {
     const existing = await new GetEventQueryImpl(this.calendarClient).query({ target: request.id });
     if (!existing.hasValue) return existing;
     const calendar = await this.calendarClient.get();

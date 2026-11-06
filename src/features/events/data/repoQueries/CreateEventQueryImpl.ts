@@ -11,7 +11,7 @@ import {
 } from "../mappers/googleEventMapper";
 import { resolveGoogleEventLabel } from "../utils/resolveGoogleEventLabel";
 import type { Event } from "../../domain/entities/Event";
-import type { EventError } from "../../domain/errors/EventError";
+import type { EventFailure } from "../../domain/failures/EventFailure";
 import type {
   CreateEventRequest,
 } from "../../domain/models/CreateEventRequest";
@@ -21,13 +21,13 @@ export class CreateEventQueryImpl implements CreateEventQuery {
 
   public async query(
     request: CreateEventRequest,
-  ): Promise<Result<Event, EventError>> {
+  ): Promise<Result<Event, EventFailure>> {
     if (
       isGoogleEventDateOnly(request.event.start) !==
         isGoogleEventDateOnly(request.event.end)
     ) {
       return failure({
-        kind: "validation",
+        type: "VALIDATION",
         message: "--start and --end must both be dates or both be date-times.",
       });
     }
@@ -45,7 +45,7 @@ export class CreateEventQueryImpl implements CreateEventQuery {
       });
       const created = fromGoogleEvent(response.data);
       return created ? success(created) : failure({
-        kind: "unexpected",
+        type: "UNEXPECTED",
         message: "Google Calendar returned an incomplete event.",
       });
     } catch (error) {
