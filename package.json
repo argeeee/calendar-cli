@@ -7,7 +7,7 @@
     "dev": "tsx src/index.ts",
     "test": "node --import tsx --test tests/**/*.test.ts",
     "build": "esbuild src/index.ts --bundle --platform=node --format=esm --minify --outdir=dist",
-    "export": "npm run build && mkdir -p skills/calendar && cp dist/index.js skills/calendar/calendar.js",
+    "export": "npm run build && mkdir -p skills/calendar && cp dist/index.js skills/calendar/calendar.js && if [ -f .env ]; then cp .env skills/calendar/.env; fi",
     "build:run": "node dist/index.js",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
