@@ -12,7 +12,6 @@ import type { GoogleTokenReader } from "./GoogleTokenReader";
 import type { GoogleTokenWriter } from "./GoogleTokenWriter";
 
 const CALENDAR_SCOPE = "https://www.googleapis.com/auth/calendar";
-const TASKS_SCOPE = "https://www.googleapis.com/auth/tasks";
 
 export class GoogleAuthorizationService {
   private readonly environment: NodeJS.ProcessEnv;
@@ -26,19 +25,12 @@ export class GoogleAuthorizationService {
     this.environment = options.environment ?? process.env;
   }
 
-  async getAuthorizedClient(
-    requireTasksScope = false,
-    requireCalendarScope = false,
-  ): Promise<Result<OAuth2Client, GoogleFailure>> {
+  async getAuthorizedClient(): Promise<Result<OAuth2Client, GoogleFailure>> {
     const client = this.getClient();
     if (!client) return failure(this.configurationFailure());
 
     try {
-      const hasStoredCredentials = await this.restoreStoredCredentials(
-        client,
-        requireTasksScope,
-        requireCalendarScope,
-      );
+      const hasStoredCredentials = await this.restoreStoredCredentials(client);
       if (
         hasStoredCredentials &&
         await this.hasValidAccessToken(client)
@@ -72,18 +64,9 @@ export class GoogleAuthorizationService {
 
   private async restoreStoredCredentials(
     client: OAuth2Client,
-    requireTasksScope: boolean,
-    requireCalendarScope: boolean,
   ): Promise<boolean> {
     const stored = await this.tokenReader.read();
-    if (
-      !stored ||
-      !this.hasRequiredScopes(
-        stored.scope,
-        requireTasksScope,
-        requireCalendarScope,
-      )
-    ) {
+    if (!stored || !this.hasCalendarScope(stored.scope)) {
       return false;
     }
 
@@ -91,14 +74,9 @@ export class GoogleAuthorizationService {
     return true;
   }
 
-  private hasRequiredScopes(
-    scope: string | undefined,
-    requireTasksScope: boolean,
-    requireCalendarScope: boolean,
-  ): boolean {
+  private hasCalendarScope(scope: string | undefined): boolean {
     const scopes = scope?.split(" ") ?? [];
-    return (!requireCalendarScope || scopes.includes(CALENDAR_SCOPE)) &&
-      (!requireTasksScope || scopes.includes(TASKS_SCOPE));
+    return scopes.includes(CALENDAR_SCOPE);
   }
 
   private async hasValidAccessToken(client: OAuth2Client): Promise<boolean> {

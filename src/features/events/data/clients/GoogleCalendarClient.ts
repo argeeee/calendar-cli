@@ -10,13 +10,8 @@ export class GoogleCalendarClient {
     private readonly authorization: GoogleAuthorizationService,
   ) {}
 
-  public async get(
-    requireCalendarScope = false,
-  ): Promise<Result<calendar_v3.Calendar, EventError>> {
-    const client = await this.authorization.getAuthorizedClient(
-      false,
-      requireCalendarScope,
-    );
+  public async get(): Promise<Result<calendar_v3.Calendar, EventError>> {
+    const client = await this.authorization.getAuthorizedClient();
     if (!client.hasValue) {
       return failure({
         kind: client.error.type === "CONFIGURATION" ? "configuration" :

@@ -23,9 +23,7 @@ export class UpdateEventQueryImpl implements UpdateEventQuery {
   public async query(
     request: UpdateEventRequest,
   ): Promise<Result<Event, EventError>> {
-    const calendar = await this.calendarClient.get(
-      request.patch.eventLabelId !== undefined,
-    );
+    const calendar = await this.calendarClient.get();
     if (!calendar.hasValue) return calendar;
     try {
       const current = fromGoogleEvent(

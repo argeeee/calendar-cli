@@ -3,10 +3,7 @@ import type { Credentials, OAuth2Client } from "google-auth-library";
 import type { BrowserOpener } from "../../domain/services/BrowserOpener";
 import { GoogleOAuthCallbackServer } from "./GoogleOAuthCallbackServer";
 
-const GOOGLE_SCOPES = [
-  "https://www.googleapis.com/auth/calendar",
-  "https://www.googleapis.com/auth/tasks",
-];
+const GOOGLE_SCOPES = ["https://www.googleapis.com/auth/calendar"];
 
 export class GoogleOAuthAuthorizer {
   constructor(private readonly browserOpener: BrowserOpener) {}

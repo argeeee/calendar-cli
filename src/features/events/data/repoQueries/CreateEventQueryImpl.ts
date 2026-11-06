@@ -31,9 +31,7 @@ export class CreateEventQueryImpl implements CreateEventQuery {
         message: "--start and --end must both be dates or both be date-times.",
       });
     }
-    const calendar = await this.calendarClient.get(
-      request.event.eventLabelId !== undefined,
-    );
+    const calendar = await this.calendarClient.get();
     if (!calendar.hasValue) return calendar;
     try {
       const event = await resolveGoogleEventLabel(
